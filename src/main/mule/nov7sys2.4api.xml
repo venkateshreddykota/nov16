@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="d02f4c31-14e7-45b0-8477-cccb831ec477" >
+		<http:listener-connection host="localhost" port="8084" />
+	</http:listener-config>
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="60317961-10fd-4c66-b67d-a053a1962a9d" >
+		<db:my-sql-connection host="localhost" port="3306" user="root" password="888kvd57" database="techbulls" />
+	</db:config>
+	<flow name="nov7sys2.4apiFlow" doc:id="88f4e60a-57cb-4f97-b1a2-803d6f1033f3" >
+		<http:listener doc:name="Listener" doc:id="0fc560a2-e931-4e1f-8f1b-b44c9d3c43f0" config-ref="HTTP_Listener_config" path="/nov7sys2.4"/>
+		<db:select doc:name="Select" doc:id="1e01a890-1aa2-42ec-9972-7431f7020122" config-ref="Database_Config">
+			<db:sql ><![CDATA[select * from employee3]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="f12140cb-d065-4bea-bf1d-936b60ad70e5" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
